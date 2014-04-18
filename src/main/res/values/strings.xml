@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AutoPing</string>
+    <string name="menu_settings">Settings</string>    
+    <string name="retrieveLocationButton">Retrieve Location</string>
+    <string name="sendLocationButton">Send Location</string>
+    <string name="update_online">Network connection available!</string>
+    <string name="update_offline">No network connection available!</string>
+    <string name="title_activity_main">Tour de Drupal</string>
+
+    <string name="pref_run_background">Run in background</string>
+    <string name="pref_run_background_summary">Updates your position in background</string>
+    <string name="pref_update_frequency">Update Frequency</string>
+    <string name="pref_update_frequency_summary">Set the update frequency</string>
+    <string name="pref_user_name">Set username</string>
+    <string name="pref_user_name_summary">Set your username</string>
+     
+    <string name="pref_user_profile">User Profile</string>
+    <string name="pref_update_setting">Update Settings</string>
+</resources>
