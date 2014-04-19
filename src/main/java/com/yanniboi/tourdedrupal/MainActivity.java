@@ -5,13 +5,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import android.net.ConnectivityManager;
 import android.app.Activity;
-import android.app.Notification;
-import android.app.Notification.Builder;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -22,7 +18,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 import android.widget.Button;
-import android.widget.CheckBox;
 //import android.util.Log;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -35,13 +30,10 @@ public class MainActivity extends Activity {
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000 * 60; // in Milliseconds
     private static final int RESULT_SETTINGS = 1;
 
-    CheckBox prefCheckBox;
-   
     public LocationManager locationManager;
     public LocationListener mlocListener; 
     protected Location activeLocation;
     protected ConnectivityManager connectivityManager;
-    protected Button settingsButton;
     protected Button retrieveLocationButton;
     protected Button sendLocationButton;
 
@@ -56,8 +48,7 @@ public class MainActivity extends Activity {
   
     	locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        SharedPreferences sharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         String time = sharedPrefs.getString("prefUpdateFrequency", "60000");
 
@@ -104,10 +95,8 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPause() {
-        SharedPreferences sharedPrefs = PreferenceManager
-            .getDefaultSharedPreferences(this);
-        if (sharedPrefs.getBoolean("prefRunBackground", false) == false) {
-            Toast.makeText(MainActivity.this, String.valueOf(sharedPrefs.getBoolean("prefRunBackground", false)), Toast.LENGTH_LONG).show();
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!sharedPrefs.getBoolean("prefRunBackground", false)) {
             stopListening();
         }
         super.onPause();
@@ -278,21 +267,27 @@ public class MainActivity extends Activity {
     	if (activeLocation == null) {
         	activeLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     	}
-    	//Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
     	if (activeLocation != null) {
     		String lat = Double.toString(activeLocation.getLatitude());
     		String lng = Double.toString(activeLocation.getLongitude());
-     
-    		try {
-    			String link = "http://six-gs.com/autoping/checkin?id=1234&lat=" + lat + "&lng=" + lng;
+
+            SharedPreferences prefsSession = getSharedPreferences("PREFS_SESSION", 0);
+            String session_id = prefsSession.getString("session_id", "NULL");
+            //String session_name = prefsSession.getString("session_name", "NULL");
+
+            try {
+                // Debug
+                //String link = "http://six-gs.com/autoping/checkin?id=1234&lat=" + lat + "&lng=" + lng;
+                String link = "http://dev.tourdedrupal.org/app/update/" + session_id + "/" + lat + "/" + lng;
 
     			URL url = new URL(link);
 
     			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
     			siteStatus = urlConnection.getResponseCode();
-	     
+
     			urlConnection.disconnect();
+
     		}
     		catch (IOException ignored) {}
     	}

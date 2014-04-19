@@ -3,6 +3,8 @@ build/*
 .idea/*
 .gradle/*
 *.sh
+src/main/gen/*
+*.iml
 
 # Local settings
 local.properties

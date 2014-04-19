@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,22 +12,14 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import java.util.List;
-import java.util.ArrayList;
 import org.apache.http.HttpResponse;
 import java.io.IOException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -36,23 +27,15 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.protocol.HTTP;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.client.CookieStore;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.cookie.BasicClientCookie;
-import org.apache.http.client.protocol.ClientContext;
-import android.content.SharedPreferences.Editor;
 
+import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
 public class UserLoginActivity extends Activity {
-
-	public static final String PREFS_SESSION = "PREFS_SESSION";
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -145,21 +128,17 @@ public class UserLoginActivity extends Activity {
 			focusView = mPasswordView;
 			cancel = true;
 		} else if (mPassword.length() < 4) {
-			mPasswordView.setError(getString(R.string.error_invalid_password));
-			focusView = mPasswordView;
-			cancel = true;
-		}
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
 
 		// Check for a valid email address.
 		if (TextUtils.isEmpty(mEmail)) {
 			mEmailView.setError(getString(R.string.error_field_required));
 			focusView = mEmailView;
 			cancel = true;
-		} /*else if (!mEmail.contains("@")) {
-			mEmailView.setError(getString(R.string.error_invalid_email));
-			focusView = mEmailView;
-			cancel = true;
-		}*/
+		}
 
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
@@ -225,9 +204,10 @@ public class UserLoginActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 				// Simulate network access.
 				HttpClient client = new DefaultHttpClient();
-				HttpPost post = new HttpPost("http://six-gs.com/rest/?q=my_services/user/login");	
+                HttpPost post = new HttpPost("http://dev.tourdedrupal.org/?q=app_services/user/login");
 
-				try {
+
+            try {
 			        // Add your data
 			        JSONObject json = new JSONObject();
 			        json.put("username", mEmail);
@@ -247,7 +227,6 @@ public class UserLoginActivity extends Activity {
         	        session_name=jsonObject.getString("session_name");
             	    session_id=jsonObject.getString("sessid");
 			   
-			        //Toast.makeText(UserLoginActivity.this, responseBody, Toast.LENGTH_LONG).show();
     			} catch (ClientProtocolException e) {
     				return false;
         			// TODO Auto-generated catch block
@@ -259,11 +238,11 @@ public class UserLoginActivity extends Activity {
         			// TODO Auto-generated catch block
     			}
 
-            if (session_id == "") {
-            	return false;
+            if (session_id != "") {
+                return true;
             }
-			return true;
-		}
+            return false;
+        }
 
 		@Override
 		protected void onPostExecute(final Boolean success) {
@@ -271,21 +250,6 @@ public class UserLoginActivity extends Activity {
 			showProgress(false);
 
 			if (success) {
-                /*BasicHttpContext mHttpContext = new BasicHttpContext();
-                CookieStore mCookieStore      = new BasicCookieStore();
-
-                //create the session cookie
-                BasicClientCookie cookie = new BasicClientCookie(session_name, session_id);
-                cookie.setVersion(0);
-                cookie.setDomain(".six-gs.com");
-                cookie.setPath("/rest/");
-                mCookieStore.addCookie(cookie);
-                cookie = new BasicClientCookie("has_js", "1");
-                mCookieStore.addCookie(cookie);
-                mHttpContext.setAttribute(ClientContext.COOKIE_STORE, mCookieStore);
-
-                httpclient.execute(httppost,mHttpContext);*/
-        		//SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplocationContext());
 			    SharedPreferences prefsSession = getSharedPreferences("PREFS_SESSION", 0);
     			Editor sessionEdit = prefsSession.edit();
     			sessionEdit.putString("session_name", session_name);
