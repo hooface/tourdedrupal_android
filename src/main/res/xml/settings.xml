@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
- 
+
     <PreferenceCategory android:title="@string/pref_user_profile" >
         <EditTextPreference
-                android:title="@string/pref_user_name"
-                android:summary="@string/pref_user_name_summary"
-                android:key="prefUsername"/>
+            android:title="@string/pref_user_name"
+            android:summary="@string/pref_user_name_summary"
+            android:key="prefUsername"/>
     </PreferenceCategory>
-     
+
     <PreferenceCategory android:title="@string/pref_update_setting" >
         <CheckBoxPreference
             android:defaultValue="false"
@@ -15,7 +15,7 @@
             android:summary="@string/pref_run_background_summary"
             android:title="@string/pref_run_background" >
         </CheckBoxPreference>
- 
+
         <ListPreference
             android:key="prefUpdateFrequency"
             android:entries="@array/updateFrequency"
@@ -30,5 +30,5 @@
             android:entryValues="@array/updateDistanceValues"
             android:title="@string/pref_update_distance" />
     </PreferenceCategory>
- 
+
 </PreferenceScreen>

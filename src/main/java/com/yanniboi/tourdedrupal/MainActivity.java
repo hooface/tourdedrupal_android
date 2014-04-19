@@ -25,28 +25,28 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
- 
+
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 5; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000 * 60; // in Milliseconds
     private static final int RESULT_SETTINGS = 1;
 
     public LocationManager locationManager;
-    public LocationListener mlocListener; 
+    public LocationListener mlocListener;
     protected Location activeLocation;
     protected ConnectivityManager connectivityManager;
     protected Button retrieveLocationButton;
     protected Button sendLocationButton;
 
-	
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
-    	setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-    	retrieveLocationButton = (Button) findViewById(R.id.retrieve_location_button);
-    	sendLocationButton = (Button) findViewById(R.id.send_location_button);
-  
-    	locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        retrieveLocationButton = (Button) findViewById(R.id.retrieve_location_button);
+        sendLocationButton = (Button) findViewById(R.id.send_location_button);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -55,38 +55,38 @@ public class MainActivity extends Activity {
         mlocListener = new MyLocationListener();
         if (sharedPrefs.getBoolean("prefRunBackground", false)) {
             locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, 
-                Long.valueOf(time), 
-                MINIMUM_DISTANCE_CHANGE_FOR_UPDATES,
-                mlocListener
+                    LocationManager.GPS_PROVIDER,
+                    Long.valueOf(time),
+                    MINIMUM_DISTANCE_CHANGE_FOR_UPDATES,
+                    mlocListener
             );
         }
-  
-    	connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		if ((connectivityManager.getActiveNetworkInfo() != null) && connectivityManager.getActiveNetworkInfo().isAvailable() && connectivityManager.getActiveNetworkInfo().isConnected()) {
-			Toast.makeText(MainActivity.this, getString(R.string.update_online), Toast.LENGTH_LONG).show();
-		}
-		else {
-			Toast.makeText(MainActivity.this, getString(R.string.update_offline), Toast.LENGTH_LONG).show();
-		}
-  
-		retrieveLocationButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showCurrentLocation();
-			}
-		});   
 
-		sendLocationButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				new updateTask().execute();
-			}
-		});
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if ((connectivityManager.getActiveNetworkInfo() != null) && connectivityManager.getActiveNetworkInfo().isAvailable() && connectivityManager.getActiveNetworkInfo().isConnected()) {
+            Toast.makeText(MainActivity.this, getString(R.string.update_online), Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(MainActivity.this, getString(R.string.update_offline), Toast.LENGTH_LONG).show();
+        }
+
+        retrieveLocationButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCurrentLocation();
+            }
+        });
+
+        sendLocationButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new updateTask().execute();
+            }
+        });
 
         showUserSettings();
     }
- 
+
     @Override
     protected void onDestroy() {
         stopListening();
@@ -105,7 +105,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         SharedPreferences sharedPrefs = PreferenceManager
-            .getDefaultSharedPreferences(this);
+                .getDefaultSharedPreferences(this);
 
         String time = sharedPrefs.getString("prefUpdateFrequency", "60000");
         if (sharedPrefs.getBoolean("prefRunBackground", false)) {
@@ -113,51 +113,51 @@ public class MainActivity extends Activity {
         }
         super.onResume();
     }
-    
+
     private void startListening(String time) {
         locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER, 
-            Long.valueOf(time), 
-            MINIMUM_DISTANCE_CHANGE_FOR_UPDATES,
-            mlocListener
+                LocationManager.GPS_PROVIDER,
+                Long.valueOf(time),
+                MINIMUM_DISTANCE_CHANGE_FOR_UPDATES,
+                mlocListener
         );
     }
 
     private void stopListening() {
         locationManager.removeUpdates(mlocListener);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	getMenuInflater().inflate(R.menu.settings, menu);
-    	return true;
+        getMenuInflater().inflate(R.menu.settings, menu);
+        return true;
     }
- 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
- 
-        case R.id.menu_settings:
-            Intent i = new Intent(this, UserSettingActivity.class);
-            startActivityForResult(i, RESULT_SETTINGS);
-            break;
- 
+
+            case R.id.menu_settings:
+                Intent i = new Intent(this, UserSettingActivity.class);
+                startActivityForResult(i, RESULT_SETTINGS);
+                break;
+
         }
- 
+
         return true;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
- 
+
         switch (requestCode) {
-        case RESULT_SETTINGS:
-            showUserSettings();
-            break;
- 
+            case RESULT_SETTINGS:
+                showUserSettings();
+                break;
+
         }
- 
+
     }
 
     /** Called when the user clicks the Send button */
@@ -166,111 +166,111 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(MainActivity.this, UserLoginActivity.class);
         startActivity(intent);
     }
- 
+
     private void showUserSettings() {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences prefsSession = getSharedPreferences("PREFS_SESSION", 0);
- 
+
         StringBuilder builder = new StringBuilder();
- 
-        builder.append("\n Username: "
+
+        builder.append("\n Username:    "
                 + sharedPrefs.getString("prefUsername", "NULL"));
- 
+
         builder.append("\n Run in background:"
                 + sharedPrefs.getBoolean("prefRunBackground", false));
- 
+
         builder.append("\n Update Frequency: "
                 + sharedPrefs.getString("prefUpdateFrequency", "NULL"));
- 
+
         builder.append("\n Update Distance: "
                 + sharedPrefs.getString("prefUpdateDistance", "NULL"));
 
         builder.append("\n Session ID: "
                 + prefsSession.getString("session_id", "NULL"));
- 
+
         builder.append("\n Session Name: "
                 + prefsSession.getString("session_name", "NULL"));
 
         TextView settingsTextView = (TextView) findViewById(R.id.textUserSettings);
- 
+
         settingsTextView.setText(builder.toString());
     }
 
     public NotificationManager getNotificationManager() {
-    	return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
- 
+
     public void showCurrentLocation() {
-    	Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-    	if (location != null) {
-    		String message = String.format(
-				"Current Location \n Longitude: %1$s \n Latitude: %2$s",
-                 location.getLongitude(), location.getLatitude()
-    		);
-    		Toast.makeText(MainActivity.this, message,
-    		Toast.LENGTH_LONG).show();
-    	}
+        if (location != null) {
+            String message = String.format(
+                    "Current Location \n Longitude: %1$s \n Latitude: %2$s",
+                    location.getLongitude(), location.getLatitude()
+            );
+            Toast.makeText(MainActivity.this, message,
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
 
- 
+
     /**
      * Update task.
      */
     class updateTask extends AsyncTask<Context, Integer, String> {
 
-    	protected String doInBackground(Context... params) {
+        protected String doInBackground(Context... params) {
 
-    		int siteStatus = -1;
+            int siteStatus = -1;
 
-    		try {
-    			siteStatus = sendCurrentLocation();
-    		}
-    		catch (IOException ignored) {}
-             
-    		if (siteStatus == 200) {
-    			return "online";
-    		}
-    		else {
-    			return "offline";
-    		}
-    	}
-     
-     
-    	@Override
-    	protected void onPostExecute(String sResponse) {
-    		if (sResponse.equals("offline")) {
-    			String message = "site response is not 200....";
-    			Toast.makeText(MainActivity.this, message,
-					Toast.LENGTH_LONG).show();
-    		}
-    		else if (sResponse.equals("online")) {
-    			String message = "site response is 200! :)";
-    			Toast.makeText(MainActivity.this, message,
-    				Toast.LENGTH_LONG).show();
-    		}
-    		else {
-    			String message = "unknown error";
-    			Toast.makeText(MainActivity.this, message,
-    				Toast.LENGTH_LONG).show();
-    		}     
-    	}
+            try {
+                siteStatus = sendCurrentLocation();
+            }
+            catch (IOException ignored) {}
+
+            if (siteStatus == 200) {
+                return "online";
+            }
+            else {
+                return "offline";
+            }
+        }
+
+
+        @Override
+        protected void onPostExecute(String sResponse) {
+            if (sResponse.equals("offline")) {
+                String message = "site response is not 200....";
+                Toast.makeText(MainActivity.this, message,
+                        Toast.LENGTH_LONG).show();
+            }
+            else if (sResponse.equals("online")) {
+                String message = "site response is 200! :)";
+                Toast.makeText(MainActivity.this, message,
+                        Toast.LENGTH_LONG).show();
+            }
+            else {
+                String message = "unknown error";
+                Toast.makeText(MainActivity.this, message,
+                        Toast.LENGTH_LONG).show();
+            }
+        }
     }
-     
+
     /**
      * Download the program from the internet and save it locally.
      */
     public int sendCurrentLocation() throws IOException {
-    	int siteStatus = -1;
+        int siteStatus = -1;
 
-    	if (activeLocation == null) {
-        	activeLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-    	}
+        if (activeLocation == null) {
+            activeLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
 
-    	if (activeLocation != null) {
-    		String lat = Double.toString(activeLocation.getLatitude());
-    		String lng = Double.toString(activeLocation.getLongitude());
+        if (activeLocation != null) {
+            String lat = Double.toString(activeLocation.getLatitude());
+            String lng = Double.toString(activeLocation.getLongitude());
 
             SharedPreferences prefsSession = getSharedPreferences("PREFS_SESSION", 0);
             String session_id = prefsSession.getString("session_id", "NULL");
@@ -281,71 +281,71 @@ public class MainActivity extends Activity {
                 //String link = "http://six-gs.com/autoping/checkin?id=1234&lat=" + lat + "&lng=" + lng;
                 String link = "http://dev.tourdedrupal.org/app/update/" + session_id + "/" + lat + "/" + lng;
 
-    			URL url = new URL(link);
+                URL url = new URL(link);
 
-    			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-    			siteStatus = urlConnection.getResponseCode();
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                siteStatus = urlConnection.getResponseCode();
 
-    			urlConnection.disconnect();
+                urlConnection.disconnect();
 
-    		}
-    		catch (IOException ignored) {}
-    	}
-    	return siteStatus;
+            }
+            catch (IOException ignored) {}
+        }
+        return siteStatus;
     }
 
 
     private class MyLocationListener implements LocationListener {
 
-    	public void onLocationChanged(Location location) {
-    		String message = String.format(
-    			"New Location \n Longitude: %1$s \n Latitude: %2$s",
-    			location.getLongitude(), location.getLatitude()
-    		);
-    		//Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-    		
-    		// Make sure a location is set.
-        	if (activeLocation == null) {
-            	activeLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        	}
-        	
-        	// Check if new location is better.
-        	if (isBetterLocation(location, activeLocation)) {
-        		new updateTask().execute();
-        		String distance = Float.toString(location.distanceTo(activeLocation));
-            	activeLocation = location;
-            	
-        		Toast.makeText(MainActivity.this, message + " Distance: " + distance, Toast.LENGTH_LONG).show();
-        	}
+        public void onLocationChanged(Location location) {
+            String message = String.format(
+                    "New Location \n Longitude: %1$s \n Latitude: %2$s",
+                    location.getLongitude(), location.getLatitude()
+            );
+            //Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
 
-    	}
+            // Make sure a location is set.
+            if (activeLocation == null) {
+                activeLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
 
-    	public void onStatusChanged(String s, int i, Bundle b) {
-    		Toast.makeText(MainActivity.this, "Provider status changed",
-                 Toast.LENGTH_LONG).show();
-    	}
+            // Check if new location is better.
+            if (isBetterLocation(location, activeLocation)) {
+                new updateTask().execute();
+                String distance = Float.toString(location.distanceTo(activeLocation));
+                activeLocation = location;
 
-    	public void onProviderDisabled(String s) {
-    		Toast.makeText(MainActivity.this,
-                 "Provider disabled by the user. GPS turned off",
-                 Toast.LENGTH_LONG).show();
-    	}
+                Toast.makeText(MainActivity.this, message + " Distance: " + distance, Toast.LENGTH_LONG).show();
+            }
 
-    	public void onProviderEnabled(String s) {
-    		Toast.makeText(MainActivity.this,
-                 "Provider enabled by the user. GPS turned on",
-                 Toast.LENGTH_LONG).show();
-    	}
+        }
+
+        public void onStatusChanged(String s, int i, Bundle b) {
+            Toast.makeText(MainActivity.this, "Provider status changed",
+                    Toast.LENGTH_LONG).show();
+        }
+
+        public void onProviderDisabled(String s) {
+            Toast.makeText(MainActivity.this,
+                    "Provider disabled by the user. GPS turned off",
+                    Toast.LENGTH_LONG).show();
+        }
+
+        public void onProviderEnabled(String s) {
+            Toast.makeText(MainActivity.this,
+                    "Provider enabled by the user. GPS turned on",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
      * Determines whether one location reading is better than the current location.
-     * 
+     *
      * @param location
      *            The new Location that you want to evaluate
      * @param currentBestLocation
      *            The current Location fix, to which you want to compare the new one
-     *            
+     *
      * @return indicates if you should use the new location
      */
     public static boolean isBetterLocation(Location location, Location currentBestLocation) {
@@ -391,10 +391,10 @@ public class MainActivity extends Activity {
 
     /**
      * Validates if the provider are equal.
-     * 
+     *
      * @param provider1 - provider
      * @param provider2 - provider
-     * 
+     *
      * @return <code>TRUE</code> if the provider are the same
      */
     public static boolean isSameProvider(String provider1, String provider2) {
