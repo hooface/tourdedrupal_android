@@ -5,6 +5,7 @@
     <string name="menu_settings">Settings</string>    
     <string name="retrieveLocationButton">Retrieve Location</string>
     <string name="sendLocationButton">Send Location</string>
+    <string name="loginButton">Login</string>
     <string name="update_online">Network connection available!</string>
     <string name="update_offline">No network connection available!</string>
     <string name="title_activity_main">Tour de Drupal</string>
@@ -13,9 +14,25 @@
     <string name="pref_run_background_summary">Updates your position in background</string>
     <string name="pref_update_frequency">Update Frequency</string>
     <string name="pref_update_frequency_summary">Set the update frequency</string>
+    <string name="pref_update_distance">Update Distance</string>
+    <string name="pref_update_distance_summary">Set the minimum distance between updates</string>
     <string name="pref_user_name">Set username</string>
     <string name="pref_user_name_summary">Set your username</string>
      
     <string name="pref_user_profile">User Profile</string>
     <string name="pref_update_setting">Update Settings</string>
+
+    <!-- Strings related to login -->
+    <string name="title_activity_login">Sign in</string>
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in_register"><b>Sign in</b> or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_forgot_password">Recover lost password</string>
+    <string name="login_progress_signing_in">Signing in&#8230;</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
 </resources>

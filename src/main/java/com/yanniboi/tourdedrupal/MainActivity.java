@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 import android.widget.Button;
+import android.widget.CheckBox;
 //import android.util.Log;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -30,10 +31,11 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
  
-    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 50; // in Meters
+    private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 5; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000 * 60; // in Milliseconds
     private static final int RESULT_SETTINGS = 1;
 
+    CheckBox prefCheckBox;
    
     public LocationManager locationManager;
     public LocationListener mlocListener; 
@@ -168,10 +170,17 @@ public class MainActivity extends Activity {
         }
  
     }
+
+    /** Called when the user clicks the Send button */
+    public void startLogin(View view) {
+        // Do something in response to button
+        Intent intent = new Intent(MainActivity.this, UserLoginActivity.class);
+        startActivity(intent);
+    }
  
     private void showUserSettings() {
-        SharedPreferences sharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences prefsSession = getSharedPreferences("PREFS_SESSION", 0);
  
         StringBuilder builder = new StringBuilder();
  
@@ -184,6 +193,15 @@ public class MainActivity extends Activity {
         builder.append("\n Update Frequency: "
                 + sharedPrefs.getString("prefUpdateFrequency", "NULL"));
  
+        builder.append("\n Update Distance: "
+                + sharedPrefs.getString("prefUpdateDistance", "NULL"));
+
+        builder.append("\n Session ID: "
+                + prefsSession.getString("session_id", "NULL"));
+ 
+        builder.append("\n Session Name: "
+                + prefsSession.getString("session_name", "NULL"));
+
         TextView settingsTextView = (TextView) findViewById(R.id.textUserSettings);
  
         settingsTextView.setText(builder.toString());

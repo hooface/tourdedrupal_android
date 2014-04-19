@@ -23,6 +23,7 @@
 
         </activity>
         <activity android:name=".UserSettingActivity" />
+        <activity android:name=".UserLoginActivity" />
         
     </application>
     

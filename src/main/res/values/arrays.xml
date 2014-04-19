@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="updateFrequency">
+        <item name="1">Debug</item>
         <item name="15">Every 15 minutes</item>
         <item name="30">Every 30 minutes</item>
         <item name="60">Ever hour</item>
         <item name="0">Never (Update maually)</item>
     </string-array>
     <string-array name="updateFrequencyValues">
+        <item name="1">60000</item>
         <item name="15">900000</item>
         <item name="30">1800000</item>
         <item name="60">3600000</item>
         <item name="0">0</item>
     </string-array>
-     
+    <string-array name="updateDistance">
+        <item name="1">Debug</item>
+        <item name="100">Every 100 meters</item>
+        <item name="1000">Every kilometer</item>
+        <item name="10000">Ever 10 kilometers</item>
+        <item name="0">Never (Update maually)</item>
+    </string-array>
+    <string-array name="updateDistanceValues">
+        <item name="1">1</item>
+        <item name="100">100</item>
+        <item name="1000">1000</item>
+        <item name="10000">10000</item>
+        <item name="0">0</item>
+    </string-array>
 </resources>

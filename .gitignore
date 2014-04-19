@@ -1,5 +1,8 @@
 # Directories
 build/*
+.idea/*
+.gradle/*
+*.sh
 
 # Local settings
 local.properties

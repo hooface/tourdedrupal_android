@@ -8,8 +8,9 @@ public class UserSettingActivity extends PreferenceActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
- 
-        addPreferencesFromResource(R.xml.settings);
- 
+
+    	getFragmentManager().beginTransaction().replace(android.R.id.content,
+        	new PrefsFragment()).commit(); 
     }
+
 }
