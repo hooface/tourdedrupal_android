@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        showUserSettings();
+        //showUserSettings();
     }
 
     @Override
@@ -153,7 +153,7 @@ public class MainActivity extends Activity {
 
         switch (requestCode) {
             case RESULT_SETTINGS:
-                showUserSettings();
+                //showUserSettings();
                 break;
 
         }
@@ -191,9 +191,9 @@ public class MainActivity extends Activity {
         builder.append("\n Session Name: "
                 + prefsSession.getString("session_name", "NULL"));
 
-        TextView settingsTextView = (TextView) findViewById(R.id.textUserSettings);
+        //TextView settingsTextView = (TextView) findViewById(R.id.textUserSettings);
 
-        settingsTextView.setText(builder.toString());
+        //settingsTextView.setText(builder.toString());
     }
 
     public NotificationManager getNotificationManager() {

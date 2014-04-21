@@ -16,8 +16,7 @@ public class Splash extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.poweroff); /*Gets your
-soundfile from res/raw/sound.ogg */
+        MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.splash);
         mp.start(); //Starts your sound
         new Handler().postDelayed(new Runnable() {
 

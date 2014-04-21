@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="tddLightRed">#a48384</color>
+    <color name="tddLightBlack">#cccccc</color>
+    <color name="tddLightBlue">#8b92ae</color>
+    <color name="tddRed">#a41e22</color>
+    <color name="tddBlack">#000000</color>
+    <color name="tddBlue">#0127ac</color>
+</resources>

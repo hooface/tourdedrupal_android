@@ -4,12 +4,14 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -231,10 +233,10 @@ public class UserLoginActivity extends Activity {
                 // TODO Auto-generated catch block
             }
 
-            if (session_id != "") {
-                return true;
+            if (session_id == "") {
+                return false;
             }
-            return false;
+            return true;
         }
 
         @Override
@@ -251,9 +253,18 @@ public class UserLoginActivity extends Activity {
 
                 finish();
             } else {
-                mPasswordView
-                        .setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                ConnectivityManager connectivityManager
+                        = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                if (activeNetworkInfo == null || !activeNetworkInfo.isConnected()) {
+
+                    mEmailView.setError(getString(R.string.error_no_internet));
+                    mEmailView.requestFocus();
+                }
+                else {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
             }
         }
 
